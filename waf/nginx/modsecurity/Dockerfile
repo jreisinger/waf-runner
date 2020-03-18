@@ -137,6 +137,7 @@ Include /etc/nginx/modsecurity/crs/rules/*.conf' > /etc/nginx/modsecurity/nginx-
     && apk add --no-cache --virtual .waf-rundeps curl $runDeps
 
 COPY nginx.conf /etc/nginx/
+COPY modsecurity.conf /etc/nginx/modsecurity/
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
