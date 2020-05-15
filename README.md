@@ -13,9 +13,9 @@ chmod u+x ~/bin/waf-runner
 
 ## Sample usage
 
-Start a testing WAF (and a testing web server) on localhost:
+Start a testing WAF and a testing backend web server on localhost:
 
 ```
 cd waf/nginx/modsecurity
-waf-runner -s .
+waf-runner -i kennethreitz/httpbin -s .
 ```

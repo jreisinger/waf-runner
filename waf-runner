@@ -56,6 +56,7 @@ copy_image_files() {
 }
 
 create_docker_compose_file() {
+    local image=$1
     print_msg "Create $TMPDIR/docker-compose.yaml"
     cat << EOF > "$TMPDIR/docker-compose.yaml"
 version: '3.3'
@@ -63,7 +64,7 @@ version: '3.3'
 services:
     testing-webserver:
         container_name: testing-webserver
-        image: nginx
+        image: "$image"
         ports:
             - 8080:80
 
@@ -144,13 +145,14 @@ help_and_exit() {
 ${0##*/} [options] DIR
 
 Build a WAF container and run it locally together with a backend web server
-container. DIR is directory containing the WAF Dockerfile and other related
-files.
+container. DIR (e.g. '.') is directory containing the WAF Dockerfile and
+other related files.
 
   options:
     -h, -?  help
     -v      be verbose
     -s      sleep (don't clean up containers) until Ctrl-C
+    -i      image to use for backend web server (default is nginx)
 EOF
 
     exit $1
@@ -164,10 +166,11 @@ OPTIND=1    # Reset in case getopts has been used previously in the shell.
 # Initialize our own variables:
 VERBOSE=0
 MYSLEEP=0
+BACKEND_IMAGE=nginx
 
 # getops can't handle long options (--help) but can handle options clustering
 # (-vf FILE)
-while getopts "h?vs" opt; do
+while getopts "h?vsi:" opt; do
     case "$opt" in
     h|\?)
         help_and_exit 0
@@ -176,6 +179,7 @@ while getopts "h?vs" opt; do
         ;;
     s)  MYSLEEP=1
         ;;
+    i)  BACKEND_IMAGE=$OPTARG
     esac
 done
 
@@ -193,7 +197,7 @@ trap clean_up   EXIT # install clean_up
 
 create_logs_dir
 create_temp_dir
-create_docker_compose_file
+create_docker_compose_file "$BACKEND_IMAGE"
 copy_image_files "$DIR"
 build_waf "$VERBOSE"
 test_waf_is_up
