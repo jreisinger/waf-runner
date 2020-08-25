@@ -51,8 +51,8 @@ create_logs_dir() {
 copy_image_files() {
     local dir=$1
 
-    print_msg "Copy all needed files from $dir to $TMPDIR"
-    cp -vr $dir/* $TMPDIR
+    print_msg "Copy recursively all files from $dir to $TMPDIR"
+    cp -r $dir/* $TMPDIR
 }
 
 create_docker_compose_file() {
