@@ -93,10 +93,10 @@ clean_up () {
 }
 
 # Build and run WAF and protected demo app.
-build_waf() {
+build_and_run_containers() {
     local verbose=$1
 
-    print_msg "Run docker images for WAF and web server"
+    print_msg "Build and run containers for WAF and web server"
     cd "$TMPDIR"
     if [[ $verbose == 1 ]]; then
         docker-compose up -d --build
@@ -193,7 +193,7 @@ create_logs_dir
 create_temp_dir
 create_docker_compose_file "$BACKEND_IMAGE"
 copy_image_files "$DIR"
-build_waf "$VERBOSE"
+build_and_run_containers "$VERBOSE"
 test_waf_is_up
 
 # Tail logs until Ctrl-C
