@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ENV NGINX_VERSION=1.17.9 \
+ENV NGINX_VERSION=1.19.2 \
     NGINX_CONFIG="\
     --prefix=/usr/share/nginx \
     --sbin-path=/usr/sbin/nginx \
@@ -43,7 +43,7 @@ ENV NGINX_VERSION=1.17.9 \
     --add-module=/usr/src/ModSecurity-nginx\
     " \
     MODSECURITY_LIB_VERSION=3.0.4 \
-    OWASP_MODSECURITY_CRS_VERSION=3.2.0 \
+    OWASP_MODSECURITY_CRS_VERSION=3.3.0 \
     MODSECURITY_CONFIG="\
     --disable-doxygen-doc \
     --disable-doxygen-html \
@@ -98,8 +98,8 @@ RUN addgroup -S nginx \
     && cp unicode.mapping /etc/nginx/modsecurity/unicode.mapping \
     # Download OWASP modsecurity crs
     && cd /usr/src \
-    && git clone --depth 1 -b v$OWASP_MODSECURITY_CRS_VERSION --single-branch https://github.com/SpiderLabs/owasp-modsecurity-crs \
-    && cd owasp-modsecurity-crs \
+    && git clone --depth 1 -b v$OWASP_MODSECURITY_CRS_VERSION --single-branch https://github.com/coreruleset/coreruleset \
+    && cd coreruleset \
     && mkdir -p /etc/nginx/modsecurity/crs/ \
     && mv crs-setup.conf.example /etc/nginx/modsecurity/crs/setup.conf \
     && mv rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf \
