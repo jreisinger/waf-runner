@@ -4,11 +4,10 @@
 
 ## Installation
 
-Copy `waf-runner` to your bin folder (or some other folder on your `PATH`) and make it executable:
+Copy `waf-runner` to your bin folder and make it executable:
 
 ```
-cp waf-runner ~/bin/
-chmod u+x ~/bin/waf-runner
+make install
 ```
 
 ## Sample usage
@@ -16,6 +15,5 @@ chmod u+x ~/bin/waf-runner
 Start a testing WAF and a testing backend web server on localhost:
 
 ```
-cd waf/nginx/modsecurity
-waf-runner -i kennethreitz/httpbin -s .
+waf-runner -i kennethreitz/httpbin waf/nginx/modsecurity
 ```
