@@ -112,12 +112,10 @@ test_waf_is_up() {
     #if curl -sI localhost:80 | grep -E "^HTTP.*OK" > /dev/null; then
     if curl --silent --fail localhost:80 > /dev/null; then
         docker ps
-        tail /tmp/var/log/nginx/*.log
-        print_msg "WAF container is up and running" "ok"
+        print_msg "WAF container is up and running (hit Ctrl-C to quit)" "ok"
     else
         docker ps
-        tail /tmp/var/log/nginx/*.log
-        print_msg "WAF container is not working" "err"
+        print_msg "WAF container is not working (hit Ctrl-C to quit)" "err"
     fi
 }
 
@@ -151,7 +149,6 @@ other related files.
   options:
     -h, -?  help
     -v      be verbose
-    -s      sleep (don't clean up containers) until Ctrl-C
     -i      image to use for backend web server (default is nginx)
 EOF
 
@@ -165,19 +162,16 @@ OPTIND=1    # Reset in case getopts has been used previously in the shell.
 
 # Initialize our own variables:
 VERBOSE=0
-MYSLEEP=0
 BACKEND_IMAGE=nginx
 
 # getops can't handle long options (--help) but can handle options clustering
 # (-vf FILE)
-while getopts "h?vsi:" opt; do
+while getopts "h?vi:" opt; do
     case "$opt" in
     h|\?)
         help_and_exit 0
         ;;
     v)  VERBOSE=1
-        ;;
-    s)  MYSLEEP=1
         ;;
     i)  BACKEND_IMAGE=$OPTARG
     esac
@@ -202,7 +196,5 @@ copy_image_files "$DIR"
 build_waf "$VERBOSE"
 test_waf_is_up
 
-if [[ $MYSLEEP == 1 ]]; then
-    print_msg "Sleeping until Ctrl-C"
-    sleep 999999
-fi
+# Tail logs until Ctrl-C
+tail -F /tmp/var/log/*.log /tmp/var/log/nginx/*.log 
