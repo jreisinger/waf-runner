@@ -32,10 +32,10 @@ print_msg() {
 create_temp_dir() {
     print_msg "Create temporary directory"
     TMPDIR=$(mktemp -d)
-    echo $TMPDIR
+    echo "$TMPDIR"
 
     # Bail out if the temp directory wasn't created successfully.
-    if [ ! -e $TMPDIR ]; then
+    if [ ! -e "$TMPDIR" ]; then
         >&2 echo "Failed to create temp directory"
         exit 1
     fi
@@ -52,7 +52,7 @@ copy_image_files() {
     local dir=$1
 
     print_msg "Copy recursively all files from $dir to $TMPDIR"
-    cp -r $dir/* $TMPDIR
+    cp -r ${dir}/* "$TMPDIR"
 }
 
 create_docker_compose_file() {
@@ -97,7 +97,7 @@ build_waf() {
     local verbose=$1
 
     print_msg "Run docker images for WAF and web server"
-    cd $TMPDIR
+    cd "$TMPDIR"
     if [[ $verbose == 1 ]]; then
         docker-compose up -d --build
     else
@@ -182,8 +182,8 @@ shift $((OPTIND-1))
 [ "$1" = "--" ] && shift
 
 # Check DIR before clean_up is installed.
-DIR="$@"
-check_dir $DIR
+DIR="$*"
+check_dir "$DIR"
 
 # Make sure we run cleanup actions even if the script exits abnormally.
 trap "exit 1"   HUP INT PIPE QUIT TERM
