@@ -152,8 +152,8 @@ other related files.
     -h, -?      help
     -v          be verbose
     -i <image>  image to use for backend web server (default is nginx)
-    -s <secs>   seconds to sleep before checking WAF is up and proxying requests (default is 5)
     -p <port>   port the backend web server is listening on (default is 80)
+    -s <secs>   seconds to sleep before checking WAF is up and proxying requests (default is 5)
 EOF
 
     exit $1
@@ -172,7 +172,7 @@ BACKEND_PORT=80
 
 # getops can't handle long options (--help) but can handle options clustering
 # (-vf FILE)
-while getopts "h?vi:s:p:" opt; do
+while getopts "h?vi:p:s:" opt; do
     case "$opt" in
     h|\?)
         help_and_exit 0
@@ -181,9 +181,9 @@ while getopts "h?vi:s:p:" opt; do
         ;;
     i)  BACKEND_IMAGE=$OPTARG
         ;;
-    s)  SLEEP=$OPTARG
-        ;;
     p)  BACKEND_PORT=$OPTARG
+        ;;
+    s)  SLEEP=$OPTARG
         ;;
     esac
 done
