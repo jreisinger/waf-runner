@@ -142,13 +142,13 @@ check_dir() {
 
 help_and_exit() {
     cat << EOF
-${0##*/} [options] DIR
+${0##*/} [Options] [DockerDir]
 
 Build a WAF container and run it locally together with a backend web server
-container. DIR (e.g. '.') is directory containing the WAF Dockerfile and
-other related files.
+container. DockerDir (default is '.') is directory containing the WAF
+Dockerfile and other related files.
 
-  options:
+  Options:
     -h, -?      help
     -v          be verbose
     -i <image>  image to use for backend web server (default is nginx)
@@ -194,6 +194,7 @@ shift $((OPTIND-1))
 
 # Check DIR before clean_up is installed.
 DIR="$*"
+[[ -z $DIR ]] && DIR="."
 check_dir "$DIR"
 
 # Make sure we run cleanup actions even if the script exits abnormally.
