@@ -192,10 +192,10 @@ done
 shift $((OPTIND-1))
 [ "$1" = "--" ] && shift
 
-# Check DIR before clean_up is installed.
-DIR="$*"
-[[ -z $DIR ]] && DIR="."
-check_dir "$DIR"
+# Check DockerDir before clean_up is installed.
+DockerDir="$*"
+[[ -z $DockerDir ]] && DockerDir="."
+check_dir "$DockerDir"
 
 # Make sure we run cleanup actions even if the script exits abnormally.
 trap "exit 1"   HUP INT PIPE QUIT TERM
@@ -204,7 +204,7 @@ trap clean_up   EXIT # install clean_up
 create_logs_dir
 create_temp_dir
 create_docker_compose_file "$BACKEND_IMAGE" "$BACKEND_PORT"
-copy_image_files "$DIR"
+copy_image_files "$DockerDir"
 build_and_run_containers "$VERBOSE"
 test_waf_is_up "$SLEEP"
 
